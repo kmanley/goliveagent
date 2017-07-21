@@ -1,12 +1,14 @@
 package liveagent
 
 type Conversation struct {
-	Message   string `url:"message"`
-	UserID    string `url:"useridentifier"`
-	DeptID    string `url:"department"`
-	Subject   string `url:"subject"`
-	Recipient string `url:"recipient"`
-	APIKey    string `url:"apikey"`
+	Message       string `url:"message"`
+	UserID        string `url:"useridentifier"`
+	DeptID        string `url:"department"`
+	Subject       string `url:"subject"`
+	Recipient     string `url:"recipient"`
+	DoNotSendMail string `url:"do_not_send_mail"`
+	UseTemplate   string `url:"use_template"`
+	Status        string `url:"status"`
 }
 
 type NewConversation struct {
@@ -22,7 +24,6 @@ type NewConversationResponse struct {
 }
 
 func (c *Client) ConversationCreate(conv *Conversation) (*NewConversation, error) {
-	conv.APIKey = c.APIKey
 	var r NewConversationResponse
 	err := c.post("conversations", conv, &r)
 	if err != nil {

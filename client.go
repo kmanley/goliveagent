@@ -1,6 +1,7 @@
 package liveagent
 
 import (
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -50,7 +51,7 @@ func (c *Client) get(path string, params StringMap, out interface{}) error {
 	}
 	req.URL.RawQuery = q.Encode()
 
-	client := &http.Client{}
+	client := c.httpclient()
 	res, err := client.Do(req)
 	if err != nil {
 		return err
@@ -78,6 +79,14 @@ func (c *Client) get(path string, params StringMap, out interface{}) error {
 	return c.handleResult(res, out)
 }
 
+func (c *Client) httpclient() *http.Client {
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	client := &http.Client{Transport: tr}
+	return client
+}
+
 func (c *Client) post(path string, in, out interface{}) error {
 	var err error
 	form, err := query.Values(in)
@@ -85,10 +94,11 @@ func (c *Client) post(path string, in, out interface{}) error {
 		return err
 	}
 
+	form["apikey"] = []string{c.APIKey}
 	req, err := http.NewRequest("POST", c.APIURL+path, strings.NewReader(form.Encode()))
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
-	client := &http.Client{}
+	client := c.httpclient()
 	res, err := client.Do(req)
 	if err != nil {
 		return err
