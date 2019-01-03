@@ -8,6 +8,7 @@ type Conversation struct {
 	Recipient     string `url:"recipient"`
 	DoNotSendMail string `url:"do_not_send_mail"`
 	UseTemplate   string `url:"use_template"`
+	IsHTMLMessage string `url:"is_html_message"`
 	Status        string `url:"status"`
 }
 
