@@ -10,6 +10,7 @@ type Conversation struct {
 	UseTemplate   string `url:"use_template"`
 	IsHTMLMessage string `url:"is_html_message"`
 	Status        string `url:"status"`
+	CC            string `url:"cc"`
 }
 
 type NewConversation struct {
